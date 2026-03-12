@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invicta 316L | El Poder de la Presencia</title>
+    
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '904800219008154');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=904800219008154&ev=PageView&noscript=1"
+    /></noscript>
     <style>
         body {
             background-color: #0a0a0a;
@@ -162,6 +178,7 @@
             border-radius: 5px;
             text-transform: uppercase;
             transition: background-color 0.2s;
+            cursor: pointer;
         }
         .btn-sm:hover {
             background-color: #128C7E;
@@ -215,7 +232,7 @@
                         <div style="text-decoration: line-through; color: #888; font-size: 14px; margin-bottom: 5px;">Antes: S/ 999</div>
                         <div class="product-price" style="color: #f39c12;">AHORA: S/ 399</div>
                     </div>
-                    <a href="https://wa.me/51906388926?text=Hola,%20quiero%20el%20modelo%20Invicta%20Pro%20Diver%20a%20S/399" target="_blank" class="btn-sm">Elegir este modelo</a>
+                    <a href="https://wa.me/51906388926?text=Hola,%20quiero%20el%20modelo%20Invicta%20Pro%20Diver%20a%20S/399" target="_blank" class="btn-sm" onclick="fbq('track', 'Purchase', {value: 399.00, currency: 'PEN', content_name: 'Invicta Pro Diver'});">Elegir este modelo</a>
                 </div>
                 <div class="product-card">
                     <div>
@@ -224,7 +241,7 @@
                         <div style="text-decoration: line-through; color: #888; font-size: 14px; margin-bottom: 5px;">Antes: S/ 899</div>
                         <div class="product-price" style="color: #f39c12;">AHORA: S/ 399</div>
                     </div>
-                    <a href="https://wa.me/51906388926?text=Hola,%20quiero%20el%20modelo%20Invicta%20Aviator%20a%20S/399" target="_blank" class="btn-sm">Elegir este modelo</a>
+                    <a href="https://wa.me/51906388926?text=Hola,%20quiero%20el%20modelo%20Invicta%20Aviator%20a%20S/399" target="_blank" class="btn-sm" onclick="fbq('track', 'Purchase', {value: 399.00, currency: 'PEN', content_name: 'Invicta Aviator'});">Elegir este modelo</a>
                 </div>
                 <div class="product-card">
                     <div>
@@ -233,7 +250,7 @@
                         <div style="text-decoration: line-through; color: #888; font-size: 14px; margin-bottom: 5px;">Antes: S/ 1,199</div>
                         <div class="product-price" style="color: #f39c12;">AHORA: S/ 499</div>
                     </div>
-                    <a href="https://wa.me/51906388926?text=Hola,%20quiero%20el%20modelo%20Invicta%20I-Force%20a%20S/499" target="_blank" class="btn-sm">Elegir este modelo</a>
+                    <a href="https://wa.me/51906388926?text=Hola,%20quiero%20el%20modelo%20Invicta%20I-Force%20a%20S/499" target="_blank" class="btn-sm" onclick="fbq('track', 'Purchase', {value: 499.00, currency: 'PEN', content_name: 'Invicta I-Force'});">Elegir este modelo</a>
                 </div>
             </div>
 
@@ -256,12 +273,12 @@
         // TRUCO TRAFFICKER: Tiempo en segundos para que aparezca la oferta.
         const segundosParaOferta = 120; 
 
-        // Variable para rastrear el tiempo y bloquear saltos
+        // Variable para rastrear el tiempo, bloquear saltos y controlar el pixel
         let tiempoPrevio = 0;
+        let ofertaMostrada = false;
 
         // Lógica 1: Quitar Mute, reiniciar al hacer clic y activar controles
         document.getElementById('video-container').addEventListener('click', function(e) {
-            // Evitamos que esto se dispare si hacen clic directamente en los controles nativos
             if (overlay.style.display !== 'none') {
                 if (video.muted) {
                     video.muted = false;
@@ -275,22 +292,23 @@
 
         // Lógica 2: Guardar el progreso real y mostrar la oferta a los 120s
         video.addEventListener('timeupdate', function() {
-            // Mientras se reproduce normalmente, actualizamos el tiempo previo
             if (!video.seeking) {
                 tiempoPrevio = video.currentTime;
             }
 
-            if (video.currentTime >= segundosParaOferta) {
+            if (video.currentTime >= segundosParaOferta && !ofertaMostrada) {
                 offerContainer.style.display = 'block';
+                ofertaMostrada = true; // Evita que se repita el código
+                
+                // TRACKING: Dispara ViewContent solo cuando se revela la oferta
+                fbq('track', 'ViewContent', {content_name: 'Oferta Relojes Revelada'});
             }
         });
 
         // Lógica 3: EL CANDADO ANTI-SALTOS (Inquebrantable)
         video.addEventListener('seeking', function() {
-            // Si intentan adelantar o retroceder más de 1 segundo de golpe...
             var delta = video.currentTime - tiempoPrevio;
             if (Math.abs(delta) > 1) {
-                // ...los devolvemos instantáneamente a donde estaban.
                 video.currentTime = tiempoPrevio;
             }
         });
